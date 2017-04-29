@@ -27,7 +27,7 @@ router.get('/api/admin/cron/isLive', function (req, res) {
     var response = {};
     response.isLive = false;
 
-    cronProvider.isLive();
+    response.isLive = cronProvider.isLive();
 
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify(response));

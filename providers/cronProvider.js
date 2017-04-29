@@ -74,8 +74,9 @@ function stopJobVox() {
 
 function isLive() {
     if (task) {
-        response.isLive = true;
+      return true;
     }
+    return false;
 }
 
 exports.startJobVox = startJobVox;
