@@ -1,0 +1,12 @@
+
+
+**/WebContent/node_modules/*
+.idea/*
+**/test/unit/reports/*
+**/test/PhantomJS*
+/dist/stats.json
+
+dist/production/stats.json
+dist/production/*.map
+/node_modules/
+**/.idea/*

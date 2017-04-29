@@ -1,0 +1,15 @@
+language: node_js
+node_js:
+- '4'
+before_install:
+- npm install -g npm@^3
+deploy:
+  provider: heroku
+  email: 'rtaimal@gmail.com '
+  skip_cleanup: true
+  api_key:
+    secure: MPWny/BMpVv85RvspE7pewX5ANogWsZBf0KBfKMhDEG9BfRFW6sByVM5FebPlQObJ+ef55RPYnlE5KotjzVNYoGOZmrohU+2q0tAAlNvCk0TD7ulQ+8nGoWXpiQnTYu1vl0xvtf6zyjwuDIh5LpnfagCBOJxSHXsR1WQo6NXpl7XGKDzBp3O5d7lMwFQIVrtr0jHV8XtIogXpR5ZKamXVs9Qsz/PbDZgovryx3PpH30fF3loIpgwISPqvRar4CWdWcn1mU96OfE+TIEVtiCxa9hrqQ4b6nhRwRo9ZZbNiP4OV2kfYO93nHh+MqWWL25TGcXQS2J4h+PqvOW9mD2roHNzQgb3+DFV6KesxXj2j60Pzos0Brg+miXHGqEiBrRqgwm3A3D/yCN6EtTorr4SrF1P/W+y6jW1QasaYK6mpt7UxoLXhk03yWAQu7SDtzUpyV3IHGrfhbCdMMWO1lSxxwkv6mb56lR/2FeK5Gkpvvibpvuj9XeV1eNeNt6hk/TlKC1ZCkqDfod7OXKTiHy3EBHI4vo9qWvxg9EakS1qVrgXSkwiSd0/1Q3eMxg7QGFVYm0vrZexczqhj2EEi5yjpBsNlIhl8VoTZbZp6bn+pqhBdJvBasHVFJg2imV6krkPrxbIELIGQCoKD8/n5xjQvA8Qt7tmCoxxx+ANhTAecNA=
+  app:
+    master: voxworker
+  on:
+    repo: ir-taimal10/VoxWorker
