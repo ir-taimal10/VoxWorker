@@ -12,5 +12,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 app.use(cronController);
 
+app.get('/', function (req, res) {
+    var response = {
+        name: "VoxWorker"
+    };
+    res.setHeader('Content-Type', 'application/json');
+    res.send(JSON.stringify(response));
+});
 
 app.listen(process.env.PORT || 3001);
