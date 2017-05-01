@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var cronProvider = require('../providers/cronProvider');
+var queueManager = require('../providers/queueManagerProvider');
 
 router.get('/api/admin/cron/start', function (req, res) {
     var response = {};
@@ -37,13 +38,16 @@ router.get('/hirefire/:keyId/info', function (req, res) {
     var response = [
         {
             name: "worker",
-            quantity: 34
+            quantity: 0
         }
     ];
+    queueManager.reviewMessages(function (filesToProcess) {
+        //response.keyId = req.params.keyId;
+        res.setHeader('Content-Type', 'application/json');
+        response.quantity = filesToProcess.length;
+        res.send(JSON.stringify(response));
+    });
 
-    //response.keyId = req.params.keyId;
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(response));
 });
 
 module.exports = router;
