@@ -6,39 +6,65 @@ aws.config.update({
     secretAccessKey: process.env.VOX_SERVICES_SECRET_KEY,
     region: 'us-west-2' //'us-east-1'
 });
-// Create S3 service object
-var ses = new aws.SES({apiVersion: '2010-12-01'});
 
-exports.sendEmail = function (emailTo) {
-    var params = {
-        Destination: {
-            ToAddresses: [emailTo]
-        },
-        Message: {
-            Body: {
-                Html: {
-                    Data: '<b>Hola,</b><br><br><b>Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.</b><br><p>Atte: El equipo Vox.</p>',
-                    Charset: 'utf-8'
+if(process.env.VOX_SERVICES_SENDGRID_USER && process.env.VOX_SERVICES_SENDGRID_PASSWORD)
+{
+    var sendgrid = require('sendgrid')(process.env.VOX_SERVICES_SENDGRID_USER, process.env.VOX_SERVICES_SENDGRID_PASSWORD);
+
+    exports.sendEmail = function(emailTo)
+                        {
+                          sendgrid.send({
+                                          to: emailTo,
+                                          from: 'vox.bot.cloud@gmail.com',
+                                          subject:'Vox - Archivo de audio procesado',
+                                          text: 'Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.',
+                                        },
+                                        function(err, json)
+                                        {
+                                            if(err)
+                                            {
+                                              return console.log(err);
+                                            }
+                                            console.log(json);
+                                        });
+                        };
+}
+else
+{
+    // Create S3 service object
+    var ses = new aws.SES({apiVersion: '2010-12-01'});
+
+    exports.sendEmail = function (emailTo) {
+        var params = {
+            Destination: {
+                ToAddresses: [emailTo]
+            },
+            Message: {
+                Body: {
+                    Html: {
+                        Data: '<b>Hola,</b><br><br><b>Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.</b><br><p>Atte: El equipo Vox.</p>',
+                        Charset: 'utf-8'
+                    },
+                    Text: {
+                        Data: 'Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.',
+                        Charset: 'utf-8'
+                    }
                 },
-                Text: {
-                    Data: 'Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.',
+                Subject: {
+                    Data: 'Vox - Archivo de audio procesado',
                     Charset: 'utf-8'
                 }
             },
-            Subject: {
-                Data: 'Vox - Archivo de audio procesado',
-                Charset: 'utf-8'
-            }
-        },
-        Source: 'vox.bot.cloud@gmail.com'
-    };
+            Source: 'vox.bot.cloud@gmail.com'
+        };
 
-    /*ses.sendEmail(params, function (err, data) {
-        if (err) {
-            console.log(err, err.stack);
-        }
-        else {
-            console.log('emailServiceProvider : sendEmail : OK');
-        }
-    });*/
-};
+        /*ses.sendEmail(params, function (err, data) {
+            if (err) {
+                console.log(err, err.stack);
+            }
+            else {
+                console.log('emailServiceProvider : sendEmail : OK');
+            }
+        });*/
+    };
+}
