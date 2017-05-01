@@ -7,9 +7,9 @@ aws.config.update({
     region: 'us-west-2' //'us-east-1'
 });
 
-if(process.env.VOX_SERVICES_SENDGRID_USER && process.env.VOX_SERVICES_SENDGRID_PASSWORD)
+if(process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD)
 {
-    var sendgrid = require('sendgrid')(process.env.VOX_SERVICES_SENDGRID_USER, process.env.VOX_SERVICES_SENDGRID_PASSWORD);
+    var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
 
     exports.sendEmail = function(emailTo)
                         {
