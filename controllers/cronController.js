@@ -38,7 +38,7 @@ router.get('/hirefire/:keyId/info', function (req, res) {
     var response = [
         {
             name: "web",
-            quantity: 0
+            quantity: 10
         }
     ];
     queueManager.reviewMessages(function (filesToProcess) {
