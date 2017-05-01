@@ -58,3 +58,18 @@ exports.reviewMessages = function (done) {
     });
 };
 
+exports.getQueueAttributes = function (done) {
+    sqs.getQueueAttributes({
+        QueueUrl: process.env.VOX_QUEUE_URL, /* required */
+        AttributeNames: [
+            'All'
+        ]
+    }, function (err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else {
+            console.log(data);           // successful response
+            done(data);
+        }
+    });
+};
+

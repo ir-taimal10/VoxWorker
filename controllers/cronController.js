@@ -35,16 +35,16 @@ router.get('/api/admin/cron/isLive', function (req, res) {
 });
 
 router.get('/hirefire/:keyId/info', function (req, res) {
-    var response = [
-        {
-            name: "web",
-            quantity: 10
-        }
-    ];
-    queueManager.reviewMessages(function (filesToProcess) {
-        //response.keyId = req.params.keyId;
+    queueManager.getQueueAttributes(function (data) {
         res.setHeader('Content-Type', 'application/json');
-        response.quantity = filesToProcess.length;
+        var quantity = (data && data.Attributes) ? data.Attributes.ApproximateNumberOfMessages : 0;
+        var response = [
+            {
+                name: "web",
+                quantity: quantity
+            }
+        ];
+        console.log('messageAvailable : ', quantity);
         res.send(JSON.stringify(response));
     });
     //res.setHeader('Content-Type', 'application/json');
