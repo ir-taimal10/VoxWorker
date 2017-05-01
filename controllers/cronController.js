@@ -41,14 +41,14 @@ router.get('/hirefire/:keyId/info', function (req, res) {
             quantity: 10
         }
     ];
-    /*queueManager.reviewMessages(function (filesToProcess) {
+    queueManager.reviewMessages(function (filesToProcess) {
         //response.keyId = req.params.keyId;
         res.setHeader('Content-Type', 'application/json');
         response.quantity = filesToProcess.length;
         res.send(JSON.stringify(response));
-    });*/
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify(response));
+    });
+    //res.setHeader('Content-Type', 'application/json');
+    //res.send(JSON.stringify(response));
 });
 
 module.exports = router;
