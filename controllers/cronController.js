@@ -37,7 +37,7 @@ router.get('/api/admin/cron/isLive', function (req, res) {
 router.get('/hirefire/:keyId/info', function (req, res) {
     var response = [
         {
-            name: "worker",
+            name: "web",
             quantity: 0
         }
     ];
