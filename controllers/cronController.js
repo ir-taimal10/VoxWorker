@@ -34,11 +34,12 @@ router.get('/api/admin/cron/isLive', function (req, res) {
 });
 
 router.get('/hirefire/:keyId/info', function (req, res) {
-    var response = {};
-    //quantity(**kwargs)[source]
-    response.name ="voxworker";
-    response.quantity = 34;
-    response.queues = ["voxqueues"];
+    var response = [
+        {
+            name: "voxworker",
+            quantity: 34
+        }
+    ];
 
     //response.keyId = req.params.keyId;
     res.setHeader('Content-Type', 'application/json');
