@@ -31,7 +31,18 @@ exports.convertFile = function (fileToProcess, done) {
         }
     ).createReadStream();
 
-    if (process.env.VOX_SO === 'Linux') {
+    if (process.env.VOX_SO === 'Heroku') {
+        ffmpeg(fileStream)
+            .toFormat('mp3')
+            .on('error', function (err) {
+                console.log('An error occurred: ' + err);
+            })
+            .on('end', function () {
+                done(tempOutPath);
+            })
+            .save(tempOutPath);
+    }
+    else if (process.env.VOX_SO === 'Linux') {
         ffmpeg(fileStream)
             .setFfmpegPath(ffmpegPath)
             .toFormat('mp3')
