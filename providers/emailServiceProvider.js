@@ -7,8 +7,7 @@ aws.config.update({
     region: 'us-west-2' //'us-east-1'
 });
 
-if (process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD) {
-    var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+if (process.env.SENDGRID_API_KEY) {
     exports.sendEmail = function (emailTo) {
         if (process.env.ENABLE_SEND_EMAIL) {
             console.log('emailServiceProvider: sendEmail to: ', emailTo);
@@ -25,24 +24,22 @@ if (process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD) {
             var helper = require('sendgrid').mail;
             var fromEmail = new helper.Email('vox.bot.cloud@gmail.com');
             var toEmail = new helper.Email(emailTo);
-            var subject = 'Vox -SengridAddon - Archivo de audio procesado';
-            var content = new helper.Content('Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.');
+            var subject = 'Vox - Archivo de audio procesado';
+            var content = new helper.Content('text/plain', 'Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.');
             var mail = new helper.Mail(fromEmail, subject, toEmail, content);
 
-            var sg = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+            var sg = require('sendgrid')(process.env.SENDGRID_API_KEY);
             var request = sg.emptyRequest({
-                method: 'POST',
-                path: '/v3/mail/send',
-                body: mail.toJSON()
+              method: 'POST',
+              path: '/v3/mail/send',
+              body: mail.toJSON()
             });
 
             sg.API(request, function (error, response) {
-                if (error) {
-                    console.log('Error response received');
-                }
-                console.log(response.statusCode);
-                console.log(response.body);
-                console.log(response.headers);
+              if (error) {
+                res.send('Error response received');
+              }
+              res.send(response.statusCode+"\n"+response.body+"\n"+response.headers);
             });
 
         } else {
