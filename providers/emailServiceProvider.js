@@ -10,16 +10,41 @@ aws.config.update({
 if (process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD) {
     var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
     exports.sendEmail = function (emailTo) {
-        // using SendGrid's Node.js Library
-        // https://github.com/sendgrid/sendgrid-nodejs
         if (process.env.ENABLE_SEND_EMAIL) {
             console.log('emailServiceProvider: sendEmail to: ', emailTo);
-            var email = new sendgrid.Email();
+            /*var email = new sendgrid.Email();
             email.addTo(emailTo);
             email.setFrom('vox.bot.cloud@gmail.com');
             email.setSubject('Vox -SengridAddon - Archivo de audio procesado');
             email.setHtml('Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.');
-            sendgrid.send(email);
+            sendgrid.send(email);*/
+
+
+            // using SendGrid's v3 Node.js Library
+            // https://github.com/sendgrid/sendgrid-nodejs
+            var helper = require('sendgrid').mail;
+            var fromEmail = new helper.Email('vox.bot.cloud@gmail.com');
+            var toEmail = new helper.Email(emailTo);
+            var subject = 'Vox -SengridAddon - Archivo de audio procesado';
+            var content = new helper.Content('Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.');
+            var mail = new helper.Mail(fromEmail, subject, toEmail, content);
+
+            var sg = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
+            var request = sg.emptyRequest({
+                method: 'POST',
+                path: '/v3/mail/send',
+                body: mail.toJSON()
+            });
+
+            sg.API(request, function (error, response) {
+                if (error) {
+                    console.log('Error response received');
+                }
+                console.log(response.statusCode);
+                console.log(response.body);
+                console.log(response.headers);
+            });
+
         } else {
             console.log('emailServiceProvider: sendEmail disabled,  add ENABLE_SEND_EMAIL ', emailTo);
         }
