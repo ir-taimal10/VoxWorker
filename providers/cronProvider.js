@@ -21,7 +21,7 @@ function processVoicesWithSQS() {
                 fileManagerProvider.copyFile(source, destinyKey, function () {
                     var emailTo = fileToProcess.name.substr(37);
                     request.put(updateStatusUrl);
-                   // emailServiceProvider.sendEmail(emailTo);
+                    emailServiceProvider.sendEmail(emailTo);
                     queueManager.deleteMessage(fileInfo.receiptHandle);
                 });
             } else {
@@ -29,7 +29,7 @@ function processVoicesWithSQS() {
                     fileManagerProvider.saveFile(tempOutPath, 'repository/converted/' + fileToProcess.name + ".mp3", function () {
                         var emailTo = fileToProcess.name.substr(37);
                         request.put(updateStatusUrl);
-                        //emailServiceProvider.sendEmail(emailTo);
+                        emailServiceProvider.sendEmail(emailTo);
                         queueManager.deleteMessage(fileInfo.receiptHandle);
                     });
                 });

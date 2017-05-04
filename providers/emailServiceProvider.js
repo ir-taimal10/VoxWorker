@@ -7,27 +7,23 @@ aws.config.update({
     region: 'us-west-2' //'us-east-1'
 });
 
-if(process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD)
-{
+if (process.env.SENDGRID_USERNAME && process.env.SENDGRID_PASSWORD) {
     var sendgrid = require('sendgrid')(process.env.SENDGRID_USERNAME, process.env.SENDGRID_PASSWORD);
-
-    exports.sendEmail = function(emailTo)
-                        {
-                          sendgrid.send({
-                                          to: emailTo,
-                                          from: 'vox.bot.cloud@gmail.com',
-                                          subject:'Vox - Archivo de audio procesado',
-                                          text: 'Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.',
-                                        },
-                                        function(err, json)
-                                        {
-                                            if(err)
-                                            {
-                                              return console.log(err);
-                                            }
-                                            console.log(json);
-                                        });
-                        };
+    exports.sendEmail = function (emailTo) {
+        // using SendGrid's Node.js Library
+        // https://github.com/sendgrid/sendgrid-nodejs
+        if (process.env.ENABLE_SEND_EMAIL) {
+            console.log('emailServiceProvider: sendEmail to: ', emailTo);
+            var email = new sendgrid.Email();
+            email.addTo(emailTo);
+            email.setFrom('vox.bot.cloud@gmail.com');
+            email.setSubject('Vox -SengridAddon - Archivo de audio procesado');
+            email.setHtml('Hola, Su archivo de audio fue procesado y ha sido registrado exitosamente en la convocatoria de Vox.');
+            sendgrid.send(email);
+        } else {
+            console.log('emailServiceProvider: sendEmail disabled,  add ENABLE_SEND_EMAIL ', emailTo);
+        }
+    };
 }
 else
 {
